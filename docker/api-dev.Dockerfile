@@ -2,7 +2,9 @@ FROM trafex/php-nginx:3.6.0 AS base
 
 USER root
 
-RUN apk add --no-cache \
+# Az alap image régebbi php83 csomagokat tartalmaz; upgrade nélkül az újonnan
+# behúzott kiterjesztések (pl. php83-iconv) nem illeszkednek a PHP core-hoz.
+RUN apk upgrade --no-cache && apk add --no-cache \
     php83 \
     php83-common \
     php83-xdebug \

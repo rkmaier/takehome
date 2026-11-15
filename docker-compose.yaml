@@ -5,6 +5,9 @@ services:
     build:
       dockerfile: api-dev.Dockerfile
       context: ./docker
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
     environment:
       XDEBUG_MODE: ${XDEBUG_MODE:-off}
     volumes:
@@ -28,7 +31,10 @@ services:
     build:
       dockerfile: client-dev.Dockerfile
       context: ./docker
+    # A host felhasználóként fut, így a node_modules nem root tulajdonú lesz.
+    user: ${UID:-1000}:${GID:-1000}
     environment:
+      npm_config_cache: /tmp/.npm
       # Itt a host gép címére hivatkozunk, mert a böngészőt (jó eséllyel) azon
       # futtatjuk.
       VITE_API_URL: http://localhost:8080
